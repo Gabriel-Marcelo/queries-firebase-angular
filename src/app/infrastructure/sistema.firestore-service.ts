@@ -1,17 +1,18 @@
 import {Injectable} from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import {FirestoreService} from '@ngxs-labs/firestore-plugin';
+import {ObterSistemaDto} from '../application/dto/obter-sistema.dto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SistemaFirestoreService {
-  constructor(public db: AngularFirestore) {}
+export class SistemaFirestoreService extends FirestoreService<ObterSistemaDto> {
 
-  test: any;
+  protected path = 'sistemas';
 
-  teste() {
-    this.test = this.db.collection('Sistemas').valueChanges();
-    console.log(this.test);
+  async obterSistemas(): Promise<ObterSistemaDto[]> {
+    return await super.collectionOnce$().toPromise();
   }
 
 }
+
