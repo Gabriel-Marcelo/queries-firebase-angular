@@ -1,3 +1,4 @@
+import {ObterLojaDto} from './obter-loja.dto';
 
 export class ObterUsuarioDto {
   id: string;
@@ -6,7 +7,8 @@ export class ObterUsuarioDto {
   tipo: string;
   celular: string;
   email: string;
-  lojas: string[];
+  ids_lojas: string[];
+  lojas: ObterLojaDto[];
 
 
   constructor(id: string, nome: string, senha: string, tipo: string, celular: string, email: string, lojas: string[]) {
@@ -16,6 +18,6 @@ export class ObterUsuarioDto {
     this.tipo = tipo;
     this.celular = celular;
     this.email = email;
-    this.lojas = lojas;
+    this.ids_lojas = lojas;
   }
 }

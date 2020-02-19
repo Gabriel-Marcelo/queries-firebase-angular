@@ -13,4 +13,20 @@ export class LojaFirestoreService extends FirestoreService<ObterLojaDto> {
     return await super.collectionOnce$().toPromise();
   }
 
+ /* async obterLojasPorIdUsuario(id: string) {
+    this.path = 'lojas';
+    return await super.collectionOnce$(ref =>
+      ref.where('id', '==', id)
+    ).toPromise();
+  }*/
+
+  //Está funcionando
+  // async obterLojaPorId(id: string) {
+  //   this.path = 'lojas';
+  //   const loja = await super.docOnce$(id).toPromise();
+  //   return loja;
+  // }
+
+
+
 }

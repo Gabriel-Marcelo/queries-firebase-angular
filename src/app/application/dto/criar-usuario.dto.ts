@@ -5,7 +5,7 @@ export class CriarUsuarioDto {
   tipo: string;
   celular: string;
   email: string;
-  lojas: string[];
+  ids_lojas: string[];
 
 
   constructor(nome: string, senha: string, tipo: string, celular: string, email: string, lojas: string[]) {
@@ -14,6 +14,6 @@ export class CriarUsuarioDto {
     this.tipo = tipo;
     this.celular = celular;
     this.email = email;
-    this.lojas = lojas;
+    this.ids_lojas = lojas;
   }
 }

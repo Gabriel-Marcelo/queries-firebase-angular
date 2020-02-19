@@ -11,6 +11,8 @@ import {UsuarioFirestoreService} from '../infrastructure/usuario.firestore-servi
 import {CriarUsuarioDto} from '../application/dto/criar-usuario.dto';
 import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
 import {LojaFirestoreService} from '../infrastructure/loja.firestore-service';
+import {environment} from '../../environments/environment.prod';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -83,7 +85,7 @@ export class AppComponent implements OnInit{
 
 
   //O chamado está sendo criado
-  /*this.chamadoService.criarChamado(new CriarChamadoDto(
+  /*this.chamadoService.criarChamado('CArgQ6dwKYgBhjqdK3ue',new CriarChamadoDto(
     "descricao 1",
     "user",
     "senhaUser",
@@ -104,12 +106,12 @@ export class AppComponent implements OnInit{
 
   //Criando um usuário
   /*this.usuarioService.criarUsuario(new CriarUsuarioDto(
-    "Gabriel",
-    "gabriel",
+    "Feston",
+    "feston",
     "cliente",
     "11980612356",
-    "gabriel@gabriel.com",
-    ["123","456"]
+    "feston@feston.com",
+    ["rjFOgqwXCXtJ5Q387Ysz"]
   ));*/
 
   //Alterando usuário
@@ -126,13 +128,36 @@ export class AppComponent implements OnInit{
     /*this.usuarioService.removerUsuario('ayy4MwoNYwBccs0f09it');*/
   }
 
+  //obj: unknown[];
+
   ngOnInit(): void {
     this.testar();
+    //this.usuarioService.obterUsuariosComLojas();
+    //this.usuarioService.obterUsuariosComChamados();
+   // / console.log(this.usuarioService.obterUsuarios());
   }
 
-  async testar() {
-    const obj = await this.chamadoService.obterChamados('4OC3OuhTiqkyC9DsMRef');
-    console.log(obj);
-  }
+   async testar() {
+  //   //const obj = await this.chamadoService.obterChamados('4OC3OuhTiqkyC9DsMRef');
+  //   //const obj = await this.usuarioService.obterUsuarios();
+  //   /*const obj =  await this.firestore.collection('usuarios', ref =>
+  //     ref.where('nome', '==', 'Eliete')
+  //   );*/
+  //    const obj = await  this.usuarioService.obterIdLojasDoUsuario('4OC3OuhTiqkyC9DsMRef')
+  //     console.log(obj);
+     //MOSTRAR PRO ALEXIS
+     const obj = await this.usuarioService.obterUsuarioComLojas('CArgQ6dwKYgBhjqdK3ue');
+     console.log(obj);
+
+  //
+  //   const obj2 = await this.lojaService.obterLojas();
+  //   console.log(obj2);
+  //
+  //   const obj3 = await this.lojaService.obterLojasPorIdUsuario('789');
+  //   console.log(obj3);
+   }
+
+
+
 
 }
