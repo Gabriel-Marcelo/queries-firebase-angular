@@ -1,4 +1,4 @@
-import {ObterLojaDto} from './obter-loja.dto';
+import {ObterLojaDto} from '../loja/obter-loja.dto';
 
 export class ObterUsuarioDto {
   id: string;

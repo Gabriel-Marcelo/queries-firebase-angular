@@ -6,13 +6,13 @@ import DocumentData = firebase.firestore.DocumentData;
 import {tap} from 'rxjs/operators';
 import {SistemaFirestoreService} from '../infrastructure/sistema.firestore-service';
 import {ChamadoFirestoreService} from '../infrastructure/chamado.firestore-service';
-import {CriarChamadoDto} from '../application/dto/criar-chamado.dto';
+import {CriarChamadoDto} from '../application/dto/chamado/criar-chamado.dto';
 import {UsuarioFirestoreService} from '../infrastructure/usuario.firestore-service';
-import {CriarUsuarioDto} from '../application/dto/criar-usuario.dto';
+import {CriarUsuarioDto} from '../application/dto/usuario/criar-usuario.dto';
 import {environment} from '../../environments/environment.prod';
 import * as firebase from 'firebase';
-import {CadastrarUsuarioDto} from '../application/dto/cadastrar-usuario.dto';
-import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
+import {CadastrarUsuarioDto} from '../application/dto/usuario/cadastrar-usuario.dto';
+import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto';
 
 
 @Component({
@@ -148,13 +148,28 @@ export class AppComponent implements OnInit{
      // const obj = await this.usuarioService.obterUsuarioComLojas('4OC3OuhTiqkyC9DsMRef');
      // console.log(obj);
      // this.usuarioService.cadastrando(new CriarUsuarioDto(
-     //   "Vania",
+     //   "Valquíria",
      //   "Cliente",
      //   "11980677889",
-     //   "vania@vania.com.br",
+     //   "valquiria@valquiria.com.br",
      //   ["Xlvjq85AYfnQwoU0iSFG"],
      //    "12345655"
      // ))
+     // this.chamadoService.criarChamado('9eGYHtdu1PWBlIRV7pDR', new CriarChamadoDto(
+     //   "asdfasdf",
+     //   "asdfasdf",
+     //   "asdfasdfasd",
+     //   "asdfgadfg",
+     //   "asdfasdf",
+     //   "asdfasdfasdf",
+     //   "hipcow",
+     //   "hipcow",
+     //   "1",
+     //   "1",
+     //   "1"
+     // ))
+     const obj = await this.sistemaService.obterSistemas();
+     console.log(obj);
      // this.usuarioService.alterarUsuario('CArgQ6dwKYgBhjqdK3ue', new AlterarUsuarioDto(
      //   "55555",
      //   ['Xlvjq85AYfnQwoU0iSFG', 'rjFOgqwXCXtJ5Q387Ysz'],

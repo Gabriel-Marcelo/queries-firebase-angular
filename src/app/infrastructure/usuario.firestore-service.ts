@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {FirestoreService} from '@ngxs-labs/firestore-plugin';
-import {ObterUsuarioDto} from '../application/dto/obter-usuario.dto';
-import {CriarUsuarioDto} from '../application/dto/criar-usuario.dto';
+import {ObterUsuarioDto} from '../application/dto/usuario/obter-usuario.dto';
+import {CriarUsuarioDto} from '../application/dto/usuario/criar-usuario.dto';
 import * as firebase from 'firebase';
-import {AlterarLoginDto} from '../application/dto/alterar-login.dto';
-import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
+import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto';
 
 
 @Injectable({
@@ -23,12 +22,7 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
     }).toPromise();
   }
 
-  //Não testado
-  public async alterarLogin(dto: AlterarLoginDto) {
-    const usuarioAtual = firebase.auth().currentUser;
-    await usuarioAtual.updateEmail(dto.email);
-    await usuarioAtual.updatePassword(dto.senha);
-  }
+
 
   public async removerUsuario(id: string) {
     this.path = 'usuarios';
@@ -58,7 +52,7 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
   }
 
   private async criarUsuario(dto: CriarUsuarioDto): Promise<void> {
-    this.path = 'usuarios';
+    this.path = 'users';
     const id = super.createId();
     return await super.create$(id, {
       id: id,

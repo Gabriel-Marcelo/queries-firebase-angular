@@ -8,9 +8,12 @@ export class CriarChamadoDto {
   telefone: string;
   sistema: string;
   problema: string;
+  idProblema: string;
+  nivel: string;
+  urgencia: string;
 
-  constructor(descricao: string, usuarioTeamViewer: string, senhaTeamViewer: string, cliente: string, nomeContato: string, telefone: string, sistema: string, problema: string) {
 
+  constructor(descricao: string, usuarioTeamViewer: string, senhaTeamViewer: string, cliente: string, nomeContato: string, telefone: string, sistema: string, problema: string, idProblema: string, nivel: string, urgencia: string) {
     this.descricao = descricao;
     this.usuarioTeamViewer = usuarioTeamViewer;
     this.senhaTeamViewer = senhaTeamViewer;
@@ -19,5 +22,9 @@ export class CriarChamadoDto {
     this.telefone = telefone;
     this.sistema = sistema;
     this.problema = problema;
+    this.idProblema = idProblema;
+    this.nivel = nivel;
+    this.urgencia = urgencia;
   }
+
 }
