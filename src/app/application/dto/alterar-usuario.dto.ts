@@ -1,21 +1,14 @@
 
 export class AlterarUsuarioDto {
-
-  nome: string;
-  senha: string;
-  tipo: string;
   celular: string;
-  email: string;
-  lojas: string[];
+  ids_lojas: string[];
+  nome: string;
+  tipo: string;
 
-
-  constructor(nome: string, senha: string, tipo: string, celular: string, email: string, lojas: string[]) {
-    this.nome = nome;
-    this.senha = senha;
-    this.tipo = tipo;
+  constructor(celular: string, ids_lojas: string[], nome: string, tipo: string) {
     this.celular = celular;
-    this.email = email;
-    this.lojas = lojas;
+    this.ids_lojas = ids_lojas;
+    this.nome = nome;
+    this.tipo = tipo;
   }
-
 }

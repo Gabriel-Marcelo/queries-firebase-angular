@@ -9,10 +9,10 @@ import {ChamadoFirestoreService} from '../infrastructure/chamado.firestore-servi
 import {CriarChamadoDto} from '../application/dto/criar-chamado.dto';
 import {UsuarioFirestoreService} from '../infrastructure/usuario.firestore-service';
 import {CriarUsuarioDto} from '../application/dto/criar-usuario.dto';
-import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
-import {LojaFirestoreService} from '../infrastructure/loja.firestore-service';
 import {environment} from '../../environments/environment.prod';
 import * as firebase from 'firebase';
+import {CadastrarUsuarioDto} from '../application/dto/cadastrar-usuario.dto';
+import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
 
 
 @Component({
@@ -27,8 +27,7 @@ export class AppComponent implements OnInit{
   constructor(private readonly firestore: AngularFirestore, /*private readonly itemDoc: AngularFirestoreDocument<string>*/
               private readonly sistemaService: SistemaFirestoreService,
               private readonly chamadoService: ChamadoFirestoreService,
-              private readonly usuarioService: UsuarioFirestoreService,
-              private readonly  lojaService: LojaFirestoreService
+              private readonly usuarioService: UsuarioFirestoreService
   ) {
 
    // this.items = firestore.collection('sistemas').valueChanges(); //buscar todos
@@ -50,7 +49,7 @@ export class AppComponent implements OnInit{
   });*/
 
     // buscando pelo nome
-   // this.items = firestore.collection('Sistema', ref => ref.where('nome', '==', 'Naruto')).valueChanges();
+    //this.items = firestore.collection('Sistema', ref => ref.where('nome', '==', 'Naruto')).valueChanges();
 
     // Buscar os items ordenados
   /*this.items = firestore.collection('Sistema', ref =>
@@ -146,8 +145,29 @@ export class AppComponent implements OnInit{
   //    const obj = await  this.usuarioService.obterIdLojasDoUsuario('4OC3OuhTiqkyC9DsMRef')
   //     console.log(obj);
      //MOSTRAR PRO ALEXIS
-     const obj = await this.usuarioService.obterUsuarioComLojas('CArgQ6dwKYgBhjqdK3ue');
-     console.log(obj);
+     // const obj = await this.usuarioService.obterUsuarioComLojas('4OC3OuhTiqkyC9DsMRef');
+     // console.log(obj);
+     // this.usuarioService.cadastrando(new CriarUsuarioDto(
+     //   "Vania",
+     //   "Cliente",
+     //   "11980677889",
+     //   "vania@vania.com.br",
+     //   ["Xlvjq85AYfnQwoU0iSFG"],
+     //    "12345655"
+     // ))
+     // this.usuarioService.alterarUsuario('CArgQ6dwKYgBhjqdK3ue', new AlterarUsuarioDto(
+     //   "55555",
+     //   ['Xlvjq85AYfnQwoU0iSFG', 'rjFOgqwXCXtJ5Q387Ysz'],
+     //   "Edmilson",
+     //   "Supervisor"
+     // ))
+     /*await this.usuarioService.alterarUsuario('wgzK3h7w6fHrmJ83uUbV', new AlterarUsuarioDto(
+       "555555555",
+       ""
+     ))*/
+     //console.log(firebase.auth().currentUser);
+
+     //await this.usuarioService.removerUsuario('4OC3OuhTiqkyC9DsMRef');
 
   //
   //   const obj2 = await this.lojaService.obterLojas();
@@ -155,6 +175,9 @@ export class AppComponent implements OnInit{
   //
   //   const obj3 = await this.lojaService.obterLojasPorIdUsuario('789');
   //   console.log(obj3);
+
+
+
    }
 
 

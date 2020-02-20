@@ -2,11 +2,9 @@ import {Injectable} from '@angular/core';
 import {FirestoreService} from '@ngxs-labs/firestore-plugin';
 import {ObterUsuarioDto} from '../application/dto/obter-usuario.dto';
 import {CriarUsuarioDto} from '../application/dto/criar-usuario.dto';
-import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
-import {LojaFirestoreService} from './loja.firestore-service';
 import * as firebase from 'firebase';
-import {CadastrarUsuarioDto} from '../application/dto/cadastrar-usuario.dto';
-
+import {AlterarLoginDto} from '../application/dto/alterar-login.dto';
+import {AlterarUsuarioDto} from '../application/dto/alterar-usuario.dto';
 
 
 @Injectable({
@@ -15,12 +13,51 @@ import {CadastrarUsuarioDto} from '../application/dto/cadastrar-usuario.dto';
 export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
   protected path;
 
-  public async obterUsuarios() {
+  public async alterarUsuario(id: string, dto: AlterarUsuarioDto): Promise<void> {
     this.path = 'usuarios';
-    return await super.collectionOnce$().toPromise();
+    return await super.update$(id, {
+      celular: dto.celular,
+      ids_lojas: dto.ids_lojas,
+      nome: dto.nome,
+      tipo: dto.tipo
+    }).toPromise();
   }
 
-  async criarUsuario(dto: CriarUsuarioDto): Promise<void> {
+  //Não testado
+  public async alterarLogin(dto: AlterarLoginDto) {
+    const usuarioAtual = firebase.auth().currentUser;
+    await usuarioAtual.updateEmail(dto.email);
+    await usuarioAtual.updatePassword(dto.senha);
+  }
+
+  public async removerUsuario(id: string) {
+    this.path = 'usuarios';
+    return await super.update$(id, {excluido: true});
+  }
+
+  public async obterUsuarioComLojas(id: string) {
+    const usuario = await this.obterUsuarioPorId(id);
+    if (usuario.excluido === true) throw new Error ('Esse usuário não existe');
+    const lojasUsuario = await this.obterLojas(usuario.ids_lojas);
+    usuario.lojas = lojasUsuario;
+    return usuario;
+  }
+
+
+  public async cadastrando(criarUserDto: CriarUsuarioDto) {
+    firebase.auth().createUserWithEmailAndPassword(criarUserDto.email, criarUserDto.senha).then(async () =>
+      await this.criarUsuario(criarUserDto)
+    ).catch(() =>
+      console.log('Não foi possível criar um usuário')
+    );
+  }
+
+  private async obterUsuarioPorId(idUsuario: string): Promise<ObterUsuarioDto> {
+    this.path = 'usuarios';
+    return await super.docOnce$(idUsuario).toPromise();
+  }
+
+  private async criarUsuario(dto: CriarUsuarioDto): Promise<void> {
     this.path = 'usuarios';
     const id = super.createId();
     return await super.create$(id, {
@@ -29,65 +66,14 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
       email: dto.email,
       ids_lojas: dto.ids_lojas,
       nome: dto.nome,
-      senha: dto.senha,
-      tipo: dto.tipo
+      tipo: dto.tipo,
+      excluido: false
     }).toPromise();
   }
-  //
-  // async alterarUsuario(id: string, dto: AlterarUsuarioDto): Promise<void> {
-  //   this.path = 'usuarios';
-  //   return await super.update$(id, {
-  //     celular: dto.celular,
-  //     email: dto.email,
-  //     id: id,
-  //     lojas: dto.lojas,
-  //     nome: dto.nome,
-  //     senha: dto.senha,
-  //     tipo: dto.tipo
-  //   }).toPromise();
-  // }
-
-  public async removerUsuario(id: string) {
-    this.path = 'usuarios';
-    return await super.delete$(id).toPromise();
-  }
-
-   // async obterUsuariosComLojas() {
-   //    this.path = 'lojas';
-   //    const lojas = await super.collectionOnce$().toPromise();
-   //    this.path = 'usuarios';
-   //    const usuarios = await super.collectionOnce$().toPromise();
-   //    console.log(lojas);
-   //    console.log(usuarios);
-   // }
-
-  //  async obterUsuariosComChamados() {
-  //   this.path = 'usuarios';
-  //   //const promisse = super.collectionOnce$(ref => ref.doc().collection('chamados')).toPromise();
-  //   // const promisse = await super.docOnce$('CArgQ6dwKYgBhjqdK3ue').toPromise()
-  //    const promisse = super.collectionOnce$().toPromise();
-  //    promisse.then((value) => {
-  //
-  //    })
-  //   console.log('promisse:');
-  //   console.log(promisse);
-  //
-  // }
-
-  /*async obterUsuarioPorId(id: string) {
-    this.path = 'usuarios' + id;
-    return await super.collectionOnce$().toPromise();
-  }*/
-
-  private async obterUsuarioPorId(idUsuario: string): Promise<ObterUsuarioDto> {
-    this.path = 'usuarios';
-    return await super.docOnce$(idUsuario).toPromise();
-  }
-
 
    private async obterIdLojasDoUsuario(idUsuario: string) {
     this.path = 'usuarios';
-    const usuario = await super.docOnce$(idUsuario).toPromise()
+    const usuario = await super.docOnce$(idUsuario).toPromise();
     return usuario.lojas;
   }
 
@@ -99,43 +85,5 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
 
     return lojas;
   }
-
-  public async obterUsuarioComLojas(id: string) {
-     const usuario = await this.obterUsuarioPorId(id);
-     const lojasUsuario = await this.obterLojas(usuario.ids_lojas);
-     usuario.lojas = lojasUsuario;
-     return usuario;
-  }
-
-  async cadastrando(dto: CadastrarUsuarioDto, idUser: string) {
-    firebase.auth().createUserWithEmailAndPassword(dto.email, dto.senha).then(async () =>
-      await this.obterUsuarioComLojas(idUser)
-    ).catch((err) =>
-      alert('Error')
-    );
-  }
-
-
-  /*public async obterTodosOsUsuariosComSuasRespectivasLojas() {
-    const usuarios = await this.obterUsuarios();
-    let idsLojasDosUsuarios = [];
-    usuarios.forEach(usuario => idsLojasDosUsuarios.push(usuario.lojas));
-    let lojasUsuarios =  [];
-    idsLojasDosUsuarios.forEach(ids => lojasUsuarios.push(this.obterLojasPorId(ids)));
-  }*/
-
-  // private async lojas(ids: string[]) {
-  //   let lojas = [];
-  //   for (let id in ids) {
-  //     lojas.push(await this.obterLojasPorId(id))
-  //   }
-  // }
-
-  // private concatenarUsuariosELojas(usuarios: ObterUsuarioDto[], lojas: any[]) {
-  //   let aux = [[]];
-  //   aux[0].push(usuarios[0]);
-  //   aux[0].push(lojas[0]);
-  //   return aux;
-  // }
 
 }
