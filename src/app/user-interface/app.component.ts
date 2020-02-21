@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import 'firebase/firestore';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import DocumentData = firebase.firestore.DocumentData;
 import {tap} from 'rxjs/operators';
 import {SistemaFirestoreService} from '../infrastructure/sistema.firestore-service';
@@ -168,8 +168,48 @@ export class AppComponent implements OnInit{
      //   "1",
      //   "1"
      // ))
-     const obj = await this.sistemaService.obterSistemas();
-     console.log(obj);
+     // const obj = await this.usuarioService.cadastrando(new CriarUsuarioDto(
+     //   "Gleyce",
+     //   "Cliente",
+     //   "190",
+     //   "gleyce@gleyce.com.br",
+     //   ['4wF45z3PHHLC7ppWoDYT', 'Xlvjq85AYfnQwoU0iSFG'],
+     //   "gleyce123456"
+     // ))
+     // const obj = await this.usuarioService.alterarUsuario('BVX42uOCJhxpjzzYip3N', new AlterarUsuarioDto(
+     //   '666666',
+     //   ['4wF45z3PHHLC7ppWoDYT'],
+     //   'Ganso',
+     //   'Administrador'
+     // ))
+
+     //BUSCAR TODOS OS SISTEMAS COM SEUS PROBLEMAS
+     // const obj = await this.sistemaService.obterTodosOsSistemasComProblemas();
+     // console.log(obj);
+
+     //ID DO FIREBASE
+     // const obj = this.firestore.collectionGroup('sist');
+     // obj.get().toPromise().then((querySnapshot) => {
+     //   querySnapshot.forEach((doc) => {
+     //     //console.log(doc.id, ' : ', doc.data());
+     //      console.log(this.firestore.collection('sist/' + doc.id + '/problemas').valueChanges().toPromise());
+     //   });
+     // });
+     // console.log(obj);
+
+    // const key$ = new BehaviorSubject(null);
+    //
+    // const obj = await this.firestore.collection('sist').doc('hipcow').collection('problemas').valueChanges();
+    // obj.pipe(
+    //   tap((aux) => aux)
+    // ).toPromise();
+    // console.log(obj);
+
+     //await this.sistemaService.obterProblemasComSistemasSubquery();
+     await this.sistemaService.pegarIdDeTodosOsProblemas();
+      //firebase.auth().createUserWithEmailAndPassword("panda@panda.com.br", "panda123").then().catch(err => console.error(err))
+
+     //console.log(obj);
      // this.usuarioService.alterarUsuario('CArgQ6dwKYgBhjqdK3ue', new AlterarUsuarioDto(
      //   "55555",
      //   ['Xlvjq85AYfnQwoU0iSFG', 'rjFOgqwXCXtJ5Q387Ysz'],
