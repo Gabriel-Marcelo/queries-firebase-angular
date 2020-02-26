@@ -65,7 +65,7 @@ export class SistemaFirestoreService extends FirestoreService<ObterSistemaDto> {
    //    return sistemas;
    // }
 
-  public async obterTodosOsSistemasComProblemas() {
+  public async obterTodosOsSistemasComProblemas(): Promise<any[]> {
     const idsSist = await this.obterIdsSistemas();
     let sistemas = [];
     for (let id of idsSist) { sistemas.push(await this.obterSistemaComProblemas(id)); }
@@ -118,6 +118,44 @@ export class SistemaFirestoreService extends FirestoreService<ObterSistemaDto> {
     console.log(idsProblemas);
   }
 
+  public async obterSistemasComProblemas(): Promise<any[]> {
+    this.path = 'sist';
+    const sistemasComProblemas = [];
+    await super.collectionOnce$(ref => {
+      ref.get().then(querySnapshotSistemas => querySnapshotSistemas.forEach( queryDocumentSnapshotSistemas =>  {
+        let dadosProblemas = [];
+        ref.doc(queryDocumentSnapshotSistemas.id).collection('problemas').get().then(querySnapshotProblemas =>
+          querySnapshotProblemas.forEach(queryDocumentSnapshotProblemas => dadosProblemas.push(queryDocumentSnapshotProblemas.data())));
+        const item = {
+          nome: queryDocumentSnapshotSistemas.id,
+          problemas: dadosProblemas
+        };
+        sistemasComProblemas.push(item);
+        }));
+      return ref;
+    }).toPromise();
+    return sistemasComProblemas;
+  }
+
+  // public async obterSistemasComProblemas2() {
+  //   this.path = 'sist';
+  //   const sistemasComProblemas = [];
+  //   await super.collectionOnce$(ref => {
+  //     ref.get().then(querySnapSit => {
+  //       for (let qs in querySnapSit) {
+  //         let aux = [];
+  //         ref.doc(qs).collection('problemas').get().then(qsProb => qsProb.forEach(qdsProb => aux.push(qdsProb.data())))
+  //         const item = {
+  //           nome: qs,
+  //           lista: aux
+  //         };
+  //         sistemasComProblemas.push(item);
+  //       }
+  //     })
+  //     return ref;
+  //   }).toPromise();
+  //   return sistemasComProblemas;
+  // }
 
 }
 

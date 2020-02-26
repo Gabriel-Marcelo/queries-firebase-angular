@@ -21,7 +21,7 @@ import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-
+  teste: any[];
   items: Observable<any[]>;
   private itemDoc: AngularFirestoreDocument;
   constructor(private readonly firestore: AngularFirestore, /*private readonly itemDoc: AngularFirestoreDocument<string>*/
@@ -206,7 +206,28 @@ export class AppComponent implements OnInit{
     // console.log(obj);
 
      //await this.sistemaService.obterProblemasComSistemasSubquery();
-     await this.sistemaService.pegarIdDeTodosOsProblemas();
+     const obj = await this.sistemaService.obterTodosOsSistemasComProblemas();
+     console.log(obj);
+     //console.log(obj[0]);
+     const obj2 = await this.sistemaService.obterSistemasComProblemas();
+     console.log(obj2);
+     this.teste = await this.sistemaService.obterSistemasComProblemas();
+     console.log(obj2[1])
+
+
+     // console.log('teste: obj');
+     // obj.forEach(v => console.log(v));
+     // console.log('teste2: obj2');
+     // obj2.forEach(v => console.log(v));
+     //
+     // console.log('teste3: obj');
+     // console.log(obj.length);
+     //
+     // console.log('teste4: obj2');
+     // console.log(obj2.length);
+
+
+     //console.log(obj2[0]);
       //firebase.auth().createUserWithEmailAndPassword("panda@panda.com.br", "panda123").then().catch(err => console.error(err))
 
      //console.log(obj);
