@@ -23,6 +23,7 @@ import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto'
 export class AppComponent implements OnInit{
   teste: any[];
   items: Observable<any[]>;
+  aux: string = 'receba';
   private itemDoc: AngularFirestoreDocument;
   constructor(private readonly firestore: AngularFirestore, /*private readonly itemDoc: AngularFirestoreDocument<string>*/
               private readonly sistemaService: SistemaFirestoreService,
@@ -134,6 +135,7 @@ export class AppComponent implements OnInit{
     //this.usuarioService.obterUsuariosComLojas();
     //this.usuarioService.obterUsuariosComChamados();
    // / console.log(this.usuarioService.obterUsuarios());
+
   }
 
    async testar() {
@@ -206,13 +208,15 @@ export class AppComponent implements OnInit{
     // console.log(obj);
 
      //await this.sistemaService.obterProblemasComSistemasSubquery();
-     const obj = await this.sistemaService.obterTodosOsSistemasComProblemas();
-     console.log(obj);
+
      //console.log(obj[0]);
      const obj2 = await this.sistemaService.obterSistemasComProblemas();
      console.log(obj2);
-     this.teste = await this.sistemaService.obterSistemasComProblemas();
-     console.log(obj2[1])
+     // this.teste[1].problemas[0].nomeProblema = "eae man";
+    // console.log(this.teste[1].problemas[0].nomeProblema)
+    // console.log(obj2[1])
+
+
 
 
      // console.log('teste: obj');
