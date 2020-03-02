@@ -1,18 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import 'firebase/firestore';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {BehaviorSubject, Observable} from 'rxjs';
-import DocumentData = firebase.firestore.DocumentData;
-import {tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {SistemaFirestoreService} from '../infrastructure/sistema.firestore-service';
 import {ChamadoFirestoreService} from '../infrastructure/chamado.firestore-service';
-import {CriarChamadoDto} from '../application/dto/chamado/criar-chamado.dto';
 import {UsuarioFirestoreService} from '../infrastructure/usuario.firestore-service';
-import {CriarUsuarioDto} from '../application/dto/usuario/criar-usuario.dto';
-import {environment} from '../../environments/environment.prod';
 import * as firebase from 'firebase';
-import {CadastrarUsuarioDto} from '../application/dto/usuario/cadastrar-usuario.dto';
-import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto';
+import {UsuarioPaginationFirestoreService} from '../infrastructure/usuario-pagination.firestore-service';
 
 
 @Component({
@@ -21,246 +15,33 @@ import {AlterarUsuarioDto} from '../application/dto/usuario/alterar-usuario.dto'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  teste: any[];
+  teste: Observable<any[]>;
   items: Observable<any[]>;
   aux: string = 'receba';
   private itemDoc: AngularFirestoreDocument;
   constructor(private readonly firestore: AngularFirestore, /*private readonly itemDoc: AngularFirestoreDocument<string>*/
               private readonly sistemaService: SistemaFirestoreService,
               private readonly chamadoService: ChamadoFirestoreService,
-              private readonly usuarioService: UsuarioFirestoreService
-  ) {
-
-   // this.items = firestore.collection('sistemas').valueChanges(); //buscar todos
-   // firestore.collection('Sistema').add({nome: "hipcoSystem", problemas: {descricao: "SaMerda não abre(pistolei)"}}); //adicionar um sistema com um problema
-
-    // buscar no banco o "hipcoSystem"
-    /*this.items = firestore.collection('Sistema', ref => {
-      let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-      query = query.where('nome', '==', "hipcoSystem");
-      return query;
-    }).valueChanges();*/
-
-   // adicionando mais de um problema no sistema
-  /* const promise = firestore.collection('sistemas').add({nome: 'Naruto'});
-   promise.then(ref => {
-    ref.collection('problemas').add({ descricao: 'Problema 1' });
-    ref.collection('problemas').add({ descricao: 'Problema 2' });
-    ref.collection('problemas').add({ descricao: 'Problema 3' });
-  });*/
-
-    // buscando pelo nome
-    //this.items = firestore.collection('Sistema', ref => ref.where('nome', '==', 'Naruto')).valueChanges();
-
-    // Buscar os items ordenados
-  /*this.items = firestore.collection('Sistema', ref =>
-    ref.orderBy('nome')
-  ).valueChanges();*/
-
-    // this.itemDoc = firestore.doc('nome');
-    // this.items = this.firestore.collection('Sistema').valueChanges();
-   // this.update('Gabriel');
-
-    // Deletando um registro
-   /* this.itemDoc = firestore.doc('Sistema/Dn6juw87FcSqxTEzdnvn');
-    this.itemDoc.update({nome: "Susano"})
-    this.items = firestore.collection('Sistema').valueChanges();*/
-
-
-   /*firestore.collection('Sistema').add({nome: "Asta"});
-   this.items = firestore.collection('Sistema', ref => {
-     ref.where('nome', '==', 'Asta')
-   });
-
-   this.items.pipe(
-     tap((obj) => {
-       obj.push({problemas: "oila"})
-       obj.push({problemas: "lala"})
-     })
-   );*/
-
-   /*firestore.collection('Sistema').add({nome: "HelloWorld"});
-
-   firestore.collection('Sistema/Problemas').add({descricao: "legal"});*/
-
-
-  //O chamado está sendo criado
-  /*this.chamadoService.criarChamado('CArgQ6dwKYgBhjqdK3ue',new CriarChamadoDto(
-    "descricao 1",
-    "user",
-    "senhaUser",
-    "Daniel",
-    "Gabriel",
-    "980676966",
-    "PDV Linux",
-    "num sei"
-  ));*/
-
-  //Obtendo chamados
-  /*const obj = this.chamadoService.obterChamados();
-  console.log(obj);*/
-
-  //Obter usuarios
-  /*const obj = this.usuarioService.obterUsuarios();
-  console.log(obj);*/
-
-  //Criando um usuário
-  /*this.usuarioService.criarUsuario(new CriarUsuarioDto(
-    "Feston",
-    "feston",
-    "cliente",
-    "11980612356",
-    "feston@feston.com",
-    ["rjFOgqwXCXtJ5Q387Ysz"]
-  ));*/
-
-  //Alterando usuário
-    /*this.usuarioService.alterarUsuario("4OC3OuhTiqkyC9DsMRef", new AlterarUsuarioDto(
-      "Eliete",
-      "eliete123",
-      "Administrador",
-      "1199999999",
-      "eliete@eliete.com.br",
-      ["123", "456"]
-    ));*/
-
-    //Removendo usuário com sucesso
-    /*this.usuarioService.removerUsuario('ayy4MwoNYwBccs0f09it');*/
-  }
-
-  //obj: unknown[];
+              private readonly usuarioService: UsuarioFirestoreService,
+              private readonly usuarioPagination: UsuarioPaginationFirestoreService
+  ) {}
 
   ngOnInit(): void {
     this.testar();
-    //this.usuarioService.obterUsuariosComLojas();
-    //this.usuarioService.obterUsuariosComChamados();
-   // / console.log(this.usuarioService.obterUsuarios());
 
   }
 
    async testar() {
-  //   //const obj = await this.chamadoService.obterChamados('4OC3OuhTiqkyC9DsMRef');
-  //   //const obj = await this.usuarioService.obterUsuarios();
-  //   /*const obj =  await this.firestore.collection('usuarios', ref =>
-  //     ref.where('nome', '==', 'Eliete')
-  //   );*/
-  //    const obj = await  this.usuarioService.obterIdLojasDoUsuario('4OC3OuhTiqkyC9DsMRef')
-  //     console.log(obj);
-     //MOSTRAR PRO ALEXIS
-     // const obj = await this.usuarioService.obterUsuarioComLojas('4OC3OuhTiqkyC9DsMRef');
-     // console.log(obj);
-     // this.usuarioService.cadastrando(new CriarUsuarioDto(
-     //   "Valquíria",
-     //   "Cliente",
-     //   "11980677889",
-     //   "valquiria@valquiria.com.br",
-     //   ["Xlvjq85AYfnQwoU0iSFG"],
-     //    "12345655"
-     // ))
-     // this.chamadoService.criarChamado('9eGYHtdu1PWBlIRV7pDR', new CriarChamadoDto(
-     //   "asdfasdf",
-     //   "asdfasdf",
-     //   "asdfasdfasd",
-     //   "asdfgadfg",
-     //   "asdfasdf",
-     //   "asdfasdfasdf",
-     //   "hipcow",
-     //   "hipcow",
-     //   "1",
-     //   "1",
-     //   "1"
-     // ))
-     // const obj = await this.usuarioService.cadastrando(new CriarUsuarioDto(
-     //   "Gleyce",
-     //   "Cliente",
-     //   "190",
-     //   "gleyce@gleyce.com.br",
-     //   ['4wF45z3PHHLC7ppWoDYT', 'Xlvjq85AYfnQwoU0iSFG'],
-     //   "gleyce123456"
-     // ))
-     // const obj = await this.usuarioService.alterarUsuario('BVX42uOCJhxpjzzYip3N', new AlterarUsuarioDto(
-     //   '666666',
-     //   ['4wF45z3PHHLC7ppWoDYT'],
-     //   'Ganso',
-     //   'Administrador'
-     // ))
-
-     //BUSCAR TODOS OS SISTEMAS COM SEUS PROBLEMAS
-     // const obj = await this.sistemaService.obterTodosOsSistemasComProblemas();
-     // console.log(obj);
-
-     //ID DO FIREBASE
-     // const obj = this.firestore.collectionGroup('sist');
-     // obj.get().toPromise().then((querySnapshot) => {
-     //   querySnapshot.forEach((doc) => {
-     //     //console.log(doc.id, ' : ', doc.data());
-     //      console.log(this.firestore.collection('sist/' + doc.id + '/problemas').valueChanges().toPromise());
-     //   });
-     // });
-     // console.log(obj);
-
-    // const key$ = new BehaviorSubject(null);
-    //
-    // const obj = await this.firestore.collection('sist').doc('hipcow').collection('problemas').valueChanges();
-    // obj.pipe(
-    //   tap((aux) => aux)
-    // ).toPromise();
-    // console.log(obj);
-
-     //await this.sistemaService.obterProblemasComSistemasSubquery();
-
-     //console.log(obj[0]);
-     const obj2 = await this.sistemaService.obterSistemasComProblemas();
-     console.log(obj2);
-     // this.teste[1].problemas[0].nomeProblema = "eae man";
-    // console.log(this.teste[1].problemas[0].nomeProblema)
-    // console.log(obj2[1])
-
-
-
-
-     // console.log('teste: obj');
-     // obj.forEach(v => console.log(v));
-     // console.log('teste2: obj2');
-     // obj2.forEach(v => console.log(v));
-     //
-     // console.log('teste3: obj');
-     // console.log(obj.length);
-     //
-     // console.log('teste4: obj2');
-     // console.log(obj2.length);
-
-
-     //console.log(obj2[0]);
-      //firebase.auth().createUserWithEmailAndPassword("panda@panda.com.br", "panda123").then().catch(err => console.error(err))
-
-     //console.log(obj);
-     // this.usuarioService.alterarUsuario('CArgQ6dwKYgBhjqdK3ue', new AlterarUsuarioDto(
-     //   "55555",
-     //   ['Xlvjq85AYfnQwoU0iSFG', 'rjFOgqwXCXtJ5Q387Ysz'],
-     //   "Edmilson",
-     //   "Supervisor"
-     // ))
-     /*await this.usuarioService.alterarUsuario('wgzK3h7w6fHrmJ83uUbV', new AlterarUsuarioDto(
-       "555555555",
-       ""
-     ))*/
-     //console.log(firebase.auth().currentUser);
-
-     //await this.usuarioService.removerUsuario('4OC3OuhTiqkyC9DsMRef');
-
-  //
-  //   const obj2 = await this.lojaService.obterLojas();
-  //   console.log(obj2);
-  //
-  //   const obj3 = await this.lojaService.obterLojasPorIdUsuario('789');
-  //   console.log(obj3);
-
-
+     const obj = await this.usuarioPagination.carregarProximos();
+     console.log(obj);
 
    }
 
-
+   async clicar() {
+    this.usuarioPagination.cont += 1;
+    const variavel = await this.usuarioPagination.carregarProximos();
+    console.log(variavel);
+   }
 
 
 }
