@@ -8,48 +8,70 @@ import {Observable} from 'rxjs';
 })
 export class UsuarioPaginationFirestoreService extends FirestoreService<ObterUsuarioDto> {
 
-  cont: number = 0;
-  arr: any[];
+
+  tamanhoPagina = 3;
+  primeiroAnterior: string;
+  ultimoAnterior: string;
+  numeroPaginaAtual = 0;
+  previousStartAt: any[] = [];
 
   protected path = 'usuarios';
 
-  async carregarUsuarios() {
-    await super.collectionOnce$(ref => {
-      ref.limit(2)
-        .get().then(response => response.forEach(item => this.arr.push(item.data())));
-      return ref;
-    });
-    console.log(this.arr);
-  }
-
-  //
-
-   private async getNomeUsuarios() {
-     const users = await super.collectionOnce$(ref => ref.limit(3).orderBy('nome').startAt(this.cont)).toPromise();
-     const nomes = [];
-     users.forEach(user => nomes.push(user.nome));
-     return nomes;
+    async pegarPrimeirosUsuarios() {
+      this.aux();
+      const users = await super.collectionOnce$(ref => ref.limit(3).orderBy('nome')).toPromise();
+      this.primeiroAnterior = users[0].nome;
+      this.ultimoAnterior = users[users.length - 1].nome;
+      this.previousStartAt.push(this.primeiroAnterior);
+      return users;
   }
 
     async carregarProximos() {
-      this.aux();
-      //const ids = await this.getNomeUsuarios();
-      const ids = [];
-      return await super.collectionOnce$(ref => {
-        //console.log( ids);
-        ref.get().then(colecao => {
-          colecao.forEach(documento => {
-            ids.push(documento.data().nome);
-          });
-          console.log(ids);
-        });
-
-        // console.log(ids[0]);
-        // console.log(ids[1]);
-        //console.log(ids[0]);
-        return ref.limit(6).orderBy('nome').startAfter(0);
-      }).toPromise();
+      try {
+        const users =  await super.collectionOnce$(ref => {
+          return ref.limit(this.tamanhoPagina).orderBy('nome').startAfter(this.ultimoAnterior);
+        }).toPromise();
+        this.primeiroAnterior = users[0].nome;
+        this.ultimoAnterior = users[users.length - 1].nome;
+        this.numeroPaginaAtual += 1;
+        this.previousStartAt.push(this.primeiroAnterior);
+        return users;
+      } catch (e) {
+          throw new Error('Não há mais usuários');
+      }
     }
+
+    async carregarAnterior() {
+        try {
+          const users = await super.collectionOnce$(ref => {
+            return ref.limit(this.tamanhoPagina).orderBy('nome').startAt(this.getPreviousStartAt()).endBefore(this.primeiroAnterior);
+          }).toPromise();
+          this.primeiroAnterior = users[0].nome;
+          this.ultimoAnterior = users[users.length - 1].nome;
+          this.numeroPaginaAtual -= 1;
+          this.popPreviousStartAt(this.primeiroAnterior);
+          return users;
+        } catch (e) {
+          throw new Error('Não há mais usuários');
+        }
+    }
+
+  // Return the Doc rem where previous page will startAt
+  getPreviousStartAt() {
+    if (this.previousStartAt.length > (this.numeroPaginaAtual + 1)) {
+      this.previousStartAt.splice(this.previousStartAt.length - 2, this.previousStartAt.length - 1);
+    }
+    return this.previousStartAt[this.numeroPaginaAtual - 1];
+  }
+
+  // Remove not required document
+  popPreviousStartAt(previousFirstDoc) {
+    this.previousStartAt.forEach(element => {
+      if (previousFirstDoc === element) {
+        element = null;
+      }
+    });
+  }
 
   async aux() {
     console.log(await super.collectionOnce$(ref => ref.orderBy('nome')).toPromise());

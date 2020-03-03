@@ -14,7 +14,7 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
   protected path;
 
   public async alterarUsuario(id: string, dto: AlterarUsuarioDto): Promise<void> {
-    this.path = 'users';
+    this.path = 'usuarios';
     return await super.update$(id, {
       celular: dto.celular,
       ids_lojas: dto.ids_lojas,
@@ -26,13 +26,15 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
 
 
   public async removerUsuario(id: string) {
-    this.path = 'users';
+    this.path = 'usuarios';
     return await super.update$(id, {excluido: true});
   }
 
   public async obterUsuarioComLojas(idUser: string) {
     const usuario = await this.obterUsuarioPorId(idUser);
-    if (usuario.excluido === true) throw new Error ('Esse usuário não existe');
+    if (usuario.excluido === true) {
+      throw new Error ('Esse usuário não existe');
+    }
     const lojasUsuario = await this.obterLojas(usuario.ids_lojas);
     usuario.lojas = lojasUsuario;
     return usuario;
@@ -48,12 +50,12 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
   }
 
   private async obterUsuarioPorId(idUsuario: string): Promise<ObterUsuarioDto> {
-    this.path = 'users';
+    this.path = 'usuarios';
     return await super.docOnce$(idUsuario).toPromise();
   }
 
   private async criarUsuario(dto: CriarUsuarioDto): Promise<void> {
-    this.path = 'users';
+    this.path = 'usuarios';
     const id = super.createId();
     return await super.create$(id, {
       id: id,
@@ -67,7 +69,7 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
   }
 
    private async obterIdLojasDoUsuario(idUsuario: string): Promise<ObterLojaDto[]> {
-    this.path = 'users';
+    this.path = 'usuarios';
     const usuario = await super.docOnce$(idUsuario).toPromise();
     return usuario.lojas;
   }
