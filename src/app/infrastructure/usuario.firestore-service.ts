@@ -54,11 +54,10 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
     return await super.docOnce$(idUsuario).toPromise();
   }
 
-  private async criarUsuario(dto: CriarUsuarioDto): Promise<void> {
+  private async criarUsuario(dto: CriarUsuarioDto, uId: string): Promise<void> {
     this.path = 'usuarios';
-    const id = super.createId();
-    return await super.create$(id, {
-      id: id,
+    return await super.create$(uId, {
+      id: uId,
       celular: dto.celular,
       email: dto.email,
       ids_lojas: dto.ids_lojas,
@@ -66,12 +65,6 @@ export class UsuarioFirestoreService extends FirestoreService<ObterUsuarioDto> {
       tipo: dto.tipo,
       excluido: false
     }).toPromise();
-  }
-
-   private async obterIdLojasDoUsuario(idUsuario: string): Promise<ObterLojaDto[]> {
-    this.path = 'usuarios';
-    const usuario = await super.docOnce$(idUsuario).toPromise();
-    return usuario.lojas;
   }
 
   private async obterLojas(ids: string[]): Promise<ObterUsuarioDto[]> {

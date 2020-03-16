@@ -8,7 +8,7 @@ import {CriarChamadoDto} from '../application/dto/chamado/criar-chamado.dto';
 })
 export class ChamadoFirestoreService extends FirestoreService<ObterChamadoDto> {
 
-  protected path = 'usuarios/4OC3OuhTiqkyC9DsMRef/chamados';
+  protected path = '';
 
   async obterChamados(idUsuario: string): Promise<ObterChamadoDto[]> {
     this.path = 'usuarios/' + idUsuario + '/chamados';

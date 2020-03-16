@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import 'firebase/firestore';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Observable} from 'rxjs';
 import {SistemaFirestoreService} from '../infrastructure/sistema.firestore-service';
 import {ChamadoFirestoreService} from '../infrastructure/chamado.firestore-service';
 import {UsuarioFirestoreService} from '../infrastructure/usuario.firestore-service';
-import * as firebase from 'firebase';
 import {UsuarioPaginationFirestoreService} from '../infrastructure/usuario-pagination.firestore-service';
 import {CriarUsuarioDto} from '../application/dto/usuario/criar-usuario.dto';
 import {CriarChamadoDto} from '../application/dto/chamado/criar-chamado.dto';
@@ -30,7 +28,7 @@ export class AppComponent implements OnInit {
   ) {}
 
    ngOnInit() {
-      this.obterChamados();
+     this.cadastrando();
   }
 
    async primeirosUsuarios() {
@@ -84,5 +82,20 @@ export class AppComponent implements OnInit {
     console.log(this.chamadoPagination.numeroPaginaAtual);
   }
 
+  async cadastrando() {
+    await this.usuarioService.cadastrando(new CriarUsuarioDto(
+      'Paminha',
+      'cliente',
+      '99999999999',
+      'paminha@gmail.com.br',
+      ['não funfa', 'não funfa'],
+      'orangotangoNaoFacaIssoNuncaMais'
+    ));
+  }
+
+  async obterUsuario() {
+    const usuario = await this.usuarioService.obterUsuarioComLojas('4OC3OuhTiqkyC9DsMRef');
+    console.log(usuario);
+  }
 
 }
